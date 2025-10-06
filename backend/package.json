@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
+  
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "ts-node-dev src/index.ts",
@@ -10,7 +11,7 @@
     "build": "rimraf .build && tsc"
   },
   "repository": {
-    "type": "git",
+    "type": "git", 
     "url": "git+https://github.com/JulianaPelozo/mesatech-alocacao-pessoas.git"
   },
   "keywords": [],
