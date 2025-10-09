@@ -1,5 +1,16 @@
-import { Router } from "express";
+import express from 'express';
+import { Request,Response } from 'express';
 
-const router = Router();
+const app = express();
+const UsuarioRoutes = express.Router();
 
-export default router;
+// Handler de exemplo
+const criarUsuario = (req: Request, res: Response) => {
+  res.status(201).json({ mensagem: 'Usuário criado com sucesso!' });
+};
+
+UsuarioRoutes.post('/usuarios', criarUsuario);
+
+app.use('/', UsuarioRoutes);
+
+export { UsuarioRoutes };

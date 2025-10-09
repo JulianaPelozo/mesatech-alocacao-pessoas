@@ -1,21 +1,20 @@
-import { Request, Response } from "express";
-import Usuario from "../Model/Usuario";
+import Usuario from '../Model/Usuario';
+import { Request,Response } from 'express';
 
-export const register = async (req: Request, res: Response): Promise<void> => {
+export const register = async(req: Request, res: Response) => {
+
   try {
-    const { name, email, mobile, password } = req.body;
+    const {fullName, email, senha} = req.body;
 
-    if (!name || !email || !mobile || !password) {
-      res.status(400).json({ msg: "Por favor, preencha todos os campos" });
-      return;
+    let existirUsuario = await Usuario.findOne({ email });
+    if (existirUsuario) {
+      return res.status(500).json({ message: 'Usuário já existe' });
     }
 
-    const user = new Usuario({ name, email, mobile, password });
-    await user.save();
-
-    res.status(201).json({ msg: "Usuário registrado com sucesso" });
+    const novoUsuario = new Usuario({ fullName, email, senha });
+    await novoUsuario.save();
+    res.status(201).json({ message: 'Usuário registrado com sucesso!' });
   } catch (error) {
-    console.error("Erro ao registrar usuário:", error);
-    res.status(500).json({ msg: "Erro no servidor" });
+    res.status(500).json({ message: 'Erro ao registrar usuário', error });  
   }
-};
+}
