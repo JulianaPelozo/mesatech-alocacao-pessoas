@@ -9,75 +9,14 @@ datasource db {
 }
 
 
-model Usuario {
-  id       String @id @default(auto()) @map("_id") @db.ObjectId
-  nomeCompleto     String
-  email    String @unique
-  senha    String
-
-  @@map("usuarios")
-}
-
 model Funcionario {
   id           String     @id @default(auto()) @map("_id") @db.ObjectId
   nomeFunc     String
   telefoneFunc String
   emailFunc    String
-  disponivel   Boolean    @default(true) // sugestão para disponibilidade
-  funcao       Funcao?    @relation(fields: [funcaoId], references: [id])
-  funcaoId     String?    @db.ObjectId
-  alocacoes    Alocacao[]
-
+  disponivel   Boolean    @default(true) 
   @@map("funcionarios")
 }
 
-model Alocacao {
-  id                        String      @id @default(auto()) @map("_id") @db.ObjectId
-  Tarefa_idTarefa           String      @db.ObjectId
-  Funcionario_idFuncionario String      @db.ObjectId
-  tarefa                    Tarefa      @relation(fields: [Tarefa_idTarefa], references: [id])
-  funcionario               Funcionario @relation(fields: [Funcionario_idFuncionario], references: [id])
-
-  @@map("alocacao")
-}
-
-model Tarefa {
-  id                  String     @id @default(auto()) @map("_id") @db.ObjectId
-  nomeTarefa          String
-  descricao           String     @map("obscicoso")
-  data_inicio         DateTime
-  data_fim            DateTime?  @map("data_fun")
-  duracao             String?
-  status              String
-  Projeto_idProjeto   String     @db.ObjectId
-  projeto             Projeto    @relation(fields: [Projeto_idProjeto], references: [id])
-  dependencia_tarefas String?    @db.ObjectId
-  tarefaDependente    Tarefa?    @relation("TarefaDependencia", fields: [dependencia_tarefas], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  tarefasDependentes  Tarefa[]   @relation("TarefaDependencia")
-  alocacoes           Alocacao[]
-
-  @@map("tarefas")
-}
 
 
-
-model Funcao {
-  id           String        @id @default(auto()) @map("_id") @db.ObjectId
-  formulacion  String        @map("formulacion")
-  descricao    String        @map("assinzo")
-  funcionarios Funcionario[]
-
-  @@map("funcoes")
-}
-
-model Projeto {
-  id          String    @id @default(auto()) @map("_id") @db.ObjectId
-  nomeProj    String
-  descricao   String    @map("obscicoso")
-  data_inicio DateTime
-  data_fim    DateTime? @map("data_fun")
-  status      String
-  tarefas     Tarefa[]
-
-  @@map("projetos")
-}

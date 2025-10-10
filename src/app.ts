@@ -1,18 +1,33 @@
-import express from 'express'
-import cors from 'cors' 
+import Fastfy from 'fastify';
+import cors from '@fastify/cors';
+import { register } from './controller/UsuarioController.';
+import { routes } from './routes';
 
-const app = express()
-
-import { UsuarioRoutes } from './Routes/UsuarioRoutes'
-import {userRegister} from './Routes/UsuarioRegistro'
-app.use(express.json())
+const app = Fastfy({ logger: true });
 
 
-app.use('/registro', userRegister)
-app.use(UsuarioRoutes)
-app.use(cors())
+const start = async () => {
+    await app.register(cors)
+    await app.register(routes)
+   
 
-app.listen(3000)
+    try {
+        await app.listen({ port: 3000 });
+    } catch (error) {
+        app.log.error(error);
+        process.exit(1);
+    }
+}
+
+
+start();
+
+
+
+
+
+
+
 
 
 

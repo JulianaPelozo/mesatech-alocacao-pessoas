@@ -5,13 +5,15 @@
   "main": "src/app.ts",
   "scripts": {
     "dev": "nodemon",
-    "start": "tsx src/app.ts",
+    "start": "tsx watch src/app.ts",
     "build": "rimraf dist && tsc"
   },
   "dependencies": {
+    "@fastify/cors": "^11.1.0",
     "@prisma/client": "^6.16.3",
     "cors": "^2.8.5",
     "express": "^5.1.0",
+    "fastify": "^5.6.1",
     "typeorm": "^0.3.27",
     "typescript": "^5.9.2"
   },
