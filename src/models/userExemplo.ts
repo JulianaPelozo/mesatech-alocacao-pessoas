@@ -6,6 +6,7 @@ import mongoose,
 
 export interface IUser extends Document {
     name: string
+    
 
     getName(): string
     /* no setName o n é uma variavel, poderia ser qualquer outra coisa como até mesmo nome, name ou setName*/

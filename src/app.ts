@@ -1,9 +1,11 @@
+import { login } from './controllers/loginController';
 import express from 'express'
 import cors from 'cors'
 import mongoose from 'mongoose'
 import dotenv from 'dotenv'
 
 import exemploRoutes from './routes/exemploRoutes'
+import loginRoutes from './routes/loginRouter'
 
 dotenv.config()
 
@@ -15,33 +17,24 @@ app.use(cors())
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 
-/*
-galera as rotas vocês criam um arquivo de rota na pasta 
-importam eles aqui e colocam nessa parte de rotas
-
-Exemplo: 
-    import userRoutes from './routes/userRoutes'
-    app.use('/api', userRoutes)
-*/
-
-//rotas
 
 app.use('/api', exemploRoutes)
+app.use('/api', loginRoutes) 
+
 
 if (!MONGODB_URI) {
-  throw new Error('MONGODB_URI não esta no .env');
+  throw new Error('MONGODB_URI não está no arquivo .env');
 }
 
 mongoose.connect(MONGODB_URI)
   .then(() => {
-    console.log('Conectado ao MongoDB');
+    console.log('✅ Conectado ao MongoDB')
   })
   .catch((error) => {
-    console.error('Erro ao conectar com MongoDB:', error);
-  });
-  
+    console.error(' Erro ao conectar com MongoDB:', error)
+  })
 
 
 app.listen(PORT, () => {
-    console.log(`Servidor rodando na porta ${PORT}`);
-});
+  console.log(` Servidor rodando na porta ${PORT}`)
+})
