@@ -4,6 +4,7 @@ import {
     login
 } from '../controllers/loginController';
 import { cadastrarFuncionario } from '../controllers/funcionarioController';
+
 const router = Router();
 
 router.post('/register', registerLogin);
