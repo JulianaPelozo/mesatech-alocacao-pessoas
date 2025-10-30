@@ -85,14 +85,14 @@ class FuncionarioClass {
 const funcionarioSchema = new Schema<IFuncionario>({
     firstName: { type: String, required: true },
     lastName: { type: String, required: true },
-    email: { type: String, required: true, unique: true }, // Email deve ser único
+    email: { type: String, required: true, unique: true }, 
     password: { type: String, required: true },
     phone: { type: String, required: true },
-    CPF: { type: String, required: true, unique: true }, // CPF deve ser único
+    CPF: { type: String, required: true, unique: true }, 
     role: { type: String, enum: Object.values(Role), required: true, default: Role.USUARIO } 
 }, { 
     timestamps: true,
-    collection: 'funcionarios' // Define o nome da collection no MongoDB
+    collection: 'funcionarios' 
 })
 
 
