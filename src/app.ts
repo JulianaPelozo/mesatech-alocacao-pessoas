@@ -5,7 +5,7 @@ import mongoose from 'mongoose'
 import dotenv from 'dotenv'
 
 import exemploRoutes from './routes/exemploRoutes'
-import loginRoutes from './routes/loginRouter'
+import loginRoutes from './routes/Router'
 
 dotenv.config()
 
