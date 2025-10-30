@@ -1,4 +1,3 @@
-import { getUsers } from './../controllers/ExemploController';
 import mongoose, {Document,Schema} from "mongoose";
 
 export enum Role{

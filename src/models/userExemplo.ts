@@ -9,7 +9,6 @@ export interface IUser extends Document {
     
 
     getName(): string
-    /* no setName o n é uma variavel, poderia ser qualquer outra coisa como até mesmo nome, name ou setName*/
     setName(n: string): void
 }
 
