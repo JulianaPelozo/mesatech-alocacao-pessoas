@@ -1,55 +1,78 @@
-
-import { Request, Response } from 'express';
-import FuncionarioModel, { IFuncionario } from '../models/funcionarioModel'; 
+import { Request, Response } from "express";
+import Funcionario, { IFuncionario, Disponibilidade } from "../models/funcionarioModel";
 
 /**
-@route 
-@desc 
-@access 
+ * @route 
+ * @desc 
+ * @access 
  */
 export const cadastrarFuncionario = async (req: Request, res: Response): Promise<Response> => {
     try {
-        const { firstName, lastName, email, password, phone, CPF, role } = req.body;
+        const {
+            name,
+            departamento,
+            projeto,
+            disponibilidade,
+            company,
+            funcao,
+            tags,
+            telefone,
+            gerente
+        } = req.body;
 
-        if (!firstName || !lastName || !email || !password || !phone || !CPF || !role) {
-            return res.status(400).json({ message: 'Todos os campos do funcionário (nome, sobrenome, email, senha, telefone, CPF e função) devem ser preenchidos.' });
+        // 1. Validações obrigatórias
+        if (
+            !name ||
+            !departamento ||
+            !projeto ||
+            !disponibilidade ||
+            !company ||
+            !funcao ||
+            !telefone ||
+            !gerente
+        ) {
+            return res.status(400).json({
+                message: "Todos os campos obrigatórios devem ser preenchidos."
+            });
         }
 
-        const funcionarioExistentePorEmail = await FuncionarioModel.findOne({ email });
-        if (funcionarioExistentePorEmail) {
-            return res.status(409).json({ message: `O email ${email} já está em uso por outro funcionário.` });
+        if (!Object.values(Disponibilidade).includes(disponibilidade)) {
+            return res.status(400).json({
+                message: "Valor de disponibilidade inválido. Use: 'Disponível' ou 'Indisponível'."
+            });
         }
 
-        const funcionarioExistentePorCPF = await FuncionarioModel.findOne({ CPF });
-        if (funcionarioExistentePorCPF) {
-            return res.status(409).json({ message: `O CPF ${CPF} já está em uso por outro funcionário.` });
-        }
-        
-        const senhaHashed = password; 
+       
+        const tagsArray =
+            typeof tags === "string"
+                ? tags.split(",").map((t: string) => t.trim())
+                : Array.isArray(tags)
+                ? tags
+                : [];
 
-        const novosDadosFuncionario: Partial<IFuncionario> = {
-            firstName,
-            lastName,
-            email,
-            password: senhaHashed,
-            phone,
-            CPF,
-            role 
+        const novoFuncionario: Partial<IFuncionario> = {
+            name,
+            departamento,
+            projeto,
+            disponibilidade,
+            company,
+            funcao,
+            tags: tagsArray,
+            telefone,
+            gerente
         };
-        
-        const novoFuncionario = new FuncionarioModel(novosDadosFuncionario);
-        const funcionarioSalvo = await novoFuncionario.save();
 
-        const respostaFuncionario = funcionarioSalvo.toObject();
-        //delete respostaFuncionario.password;
+        const funcionarioCriado = await Funcionario.create(novoFuncionario);
 
-        return res.status(201).json({ 
-            message: `Funcionário ${firstName} ${lastName} cadastrado com sucesso!`, 
-            funcionario: respostaFuncionario
+        return res.status(201).json({
+            message: `Funcionário ${name} cadastrado com sucesso!`,
+            funcionario: funcionarioCriado
         });
 
     } catch (error) {
-        console.error('Erro ao cadastrar funcionário:', error);
-        return res.status(500).json({ message: 'Erro interno do servidor ao tentar cadastrar o funcionário.' });
+        console.error("Erro ao cadastrar funcionário:", error);
+        return res.status(500).json({
+            message: "Erro interno do servidor ao tentar cadastrar o funcionário."
+        });
     }
 };
