@@ -1,92 +1,45 @@
-import mongoose, { Document, Schema } from "mongoose";
+import mongoose, { Schema, Document } from "mongoose";
 
-export enum Disponibilidade {
-    DISPONIVEL = "Disponível",
-    INDISPONIVEL = "Indisponível"
+export enum Funcao {
+  DESENVOLVEDOR = "desenvolvedor",
+  DESIGNER = "designer",
+  GERENTE = "gerente",
+  ANALISTA = "analista",
+  OUTRO = "outro",
 }
 
 export interface IFuncionario extends Document {
-    name: string;
-    departamento: string;
-    projeto: string;
-    disponibilidade: Disponibilidade;
-    company: string;
-    funcao: string;
-    tags: string[];
-    telefone: string;
-    gerente: string;
-}
-
-class FuncionarioClass {
-    name!: string;
-    departamento!: string;
-    projeto!: string;
-    disponibilidade!: Disponibilidade;
-    company!: string;
-    funcao!: string;
-    tags!: string[];
-    telefone!: string;
-    gerente!: string;
-
-    constructor(
-        name?: string,
-        departamento?: string,
-        projeto?: string,
-        disponibilidade?: Disponibilidade,
-        company?: string,
-        funcao?: string,
-        tags?: string[],
-        telefone?: string,
-        gerente?: string
-    ) {
-        if (name) this.name = name;
-        if (departamento) this.departamento = departamento;
-        if (projeto) this.projeto = projeto;
-        if (disponibilidade) this.disponibilidade = disponibilidade;
-        if (company) this.company = company;
-        if (funcao) this.funcao = funcao;
-        if (tags) this.tags = tags;
-        if (telefone) this.telefone = telefone;
-        if (gerente) this.gerente = gerente;
-    }
+  name: string;             // Usado na agenda
+  departamento?: string;
+  funcao?: Funcao;
+  telefone?: string;
+  email?: string;
+  disponivel?: boolean;
+  empresa?: string;
+  tags?: string[];
+  gerente?: string;
 }
 
 const funcionarioSchema = new Schema<IFuncionario>(
-    {
-        name: { type: String, required: true },
+  {
+    name: { type: String, required: true }, // <- ESSENCIAL PARA A AGENDA
 
-        departamento: { type: String, required: true },
-        projeto: { type: String, required: true },
+    departamento: { type: String },
+    funcao: { type: String, enum: Object.values(Funcao), default: Funcao.OUTRO },
+    telefone: { type: String },
+    email: { type: String },
+    disponivel: { type: Boolean, default: true },
+    empresa: { type: String },
 
-        disponibilidade: {
-            type: String,
-            enum: Object.values(Disponibilidade),
-            required: true
-        },
+    tags: [{ type: String }],
 
-        company: { type: String, required: true },
-        funcao: { type: String, required: true },
-
-        tags: {
-            type: [String],
-            default: []
-        },
-
-        telefone: { type: String, required: true },
-
-        gerente: { type: String, required: true }
-    },
-    {
-        timestamps: true,
-        collection: "funcionarios"
-    }
+    // Pode ser o nome do gerente ou vínculo com outro funcionário
+    gerente: { type: String }
+  },
+  { timestamps: true, collection: "funcionarios" }
 );
 
-funcionarioSchema.loadClass(FuncionarioClass);
-
-const Funcionario = mongoose.model<IFuncionario>(
-    "Funcionario",
-    funcionarioSchema
+export default mongoose.model<IFuncionario>(
+  "Funcionario",
+  funcionarioSchema
 );
-
-export default Funcionario;
