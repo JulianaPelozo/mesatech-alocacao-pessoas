@@ -68,7 +68,7 @@ const authController = {
       });
 
     } catch (error: any) { // ⬅️ CORREÇÃO AQUI: adicione ': any'
-      console.error('❌ ERRO NO REGISTER:', error);
+      console.error('ERRO NO REGISTER:', error);
       res.status(500).json({ 
         message: 'Erro no servidor.',
         error: error.message // Agora funciona
@@ -120,7 +120,7 @@ const authController = {
       });
 
     } catch (error: any) { // ⬅️ CORREÇÃO AQUI
-      console.error('❌ ERRO NO LOGIN:', error);
+      console.error('ERRO NO LOGIN:', error);
       res.status(500).json({ 
         message: 'Erro no servidor.',
         error: error.message
