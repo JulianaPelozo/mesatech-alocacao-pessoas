@@ -12,7 +12,7 @@ import {
   createTask,
   updateTask,
   deleteTask
-} from "../controllers/taskcontroller";
+} from "../controllers/taskController";
 
 
 import { authenticateToken } from "../middleware/auth";
