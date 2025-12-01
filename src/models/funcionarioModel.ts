@@ -1,45 +1,18 @@
-import mongoose, { Schema, Document } from "mongoose";
-
-export enum Funcao {
-  DESENVOLVEDOR = "desenvolvedor",
-  DESIGNER = "designer",
-  GERENTE = "gerente",
-  ANALISTA = "analista",
-  OUTRO = "outro",
-}
+import mongoose, { Document, Schema } from "mongoose";
 
 export interface IFuncionario extends Document {
-  name: string;             // Usado na agenda
-  departamento?: string;
-  funcao?: Funcao;
-  telefone?: string;
-  email?: string;
-  disponivel?: boolean;
-  empresa?: string;
-  tags?: string[];
-  gerente?: string;
+  nome: string;
+  cargo: string;
+  telefone: string;
+  empresa: mongoose.Types.ObjectId;
 }
 
-const funcionarioSchema = new Schema<IFuncionario>(
-  {
-    name: { type: String, required: true }, // <- ESSENCIAL PARA A AGENDA
+const FuncionarioSchema = new Schema<IFuncionario>({
+  nome: { type: String, required: true },
+  cargo: { type: String, required: true },
+  telefone: { type: String },
+  empresa: { type: Schema.Types.ObjectId, ref: "Empresa", required: true }
+}, { timestamps: true });
 
-    departamento: { type: String },
-    funcao: { type: String, enum: Object.values(Funcao), default: Funcao.OUTRO },
-    telefone: { type: String },
-    email: { type: String },
-    disponivel: { type: Boolean, default: true },
-    empresa: { type: String },
-
-    tags: [{ type: String }],
-
-    // Pode ser o nome do gerente ou vínculo com outro funcionário
-    gerente: { type: String }
-  },
-  { timestamps: true, collection: "funcionarios" }
-);
-
-export default mongoose.model<IFuncionario>(
-  "Funcionario",
-  funcionarioSchema
-);
+const Funcionario = mongoose.model<IFuncionario>("Funcionario", FuncionarioSchema);
+export default Funcionario;

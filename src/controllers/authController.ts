@@ -9,7 +9,7 @@ const authController = {
     try {
       const { firstName, lastName, email, password, phone, CPF, role } = req.body;
 
-      console.log('📝 Tentando registrar:', { email, CPF });
+      console.log('Tentando registrar:', { email, CPF });
 
       if (!firstName || !lastName || !email || !password || !phone || !CPF || !role) {
         return res.status(400).json({ 
@@ -25,7 +25,7 @@ const authController = {
       const salt = await bcrypt.genSalt(10);
       const hashedPassword = await bcrypt.hash(password, salt);
       
-      console.log('🔑 Senha hash criada');
+      console.log('Senha hash criada');
 
       const login = new Login({
         firstName,
@@ -38,7 +38,7 @@ const authController = {
       });
       
       await login.save();
-      console.log('✅ Usuário salvo no MongoDB');
+      console.log('Usuário salvo no MongoDB');
 
       const token = jwt.sign(
         { 
@@ -53,7 +53,7 @@ const authController = {
         { expiresIn: '7d' }
       );
 
-      console.log('🎫 Token JWT gerado');
+      console.log('Token JWT gerado');
 
       res.status(201).json({
         message: 'Usuário criado com sucesso.',
@@ -67,11 +67,11 @@ const authController = {
         }
       });
 
-    } catch (error: any) { // ⬅️ CORREÇÃO AQUI: adicione ': any'
+    } catch (error: any) { 
       console.error('ERRO NO REGISTER:', error);
       res.status(500).json({ 
         message: 'Erro no servidor.',
-        error: error.message // Agora funciona
+        error: error.message 
       });
     }
   },
@@ -119,7 +119,7 @@ const authController = {
         }
       });
 
-    } catch (error: any) { // ⬅️ CORREÇÃO AQUI
+    } catch (error: any) { 
       console.error('ERRO NO LOGIN:', error);
       res.status(500).json({ 
         message: 'Erro no servidor.',
@@ -145,8 +145,8 @@ const authController = {
         CPF: user.CPF,
         role: user.role
       });
-    } catch (error: any) { // ⬅️ CORREÇÃO AQUI
-      console.error('❌ ERRO NO GETPROFILE:', error);
+    } catch (error: any) { 
+      console.error('ERRO NO GETPROFILE:', error);
       res.status(500).json({ 
         message: 'Erro no servidor.',
         error: error.message
