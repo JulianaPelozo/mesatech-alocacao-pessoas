@@ -1,9 +1,7 @@
 import { Request, Response } from "express";
 import Funcionario from "../models/funcionarioModel";
 
-/* ============================
-   CRIAR FUNCIONÁRIO
-============================ */
+
 export const cadastrarFuncionario = async (req: Request, res: Response) => {
   try {
     const {
@@ -47,9 +45,7 @@ export const cadastrarFuncionario = async (req: Request, res: Response) => {
   }
 };
 
-/* ============================
-   LISTAR TODOS
-============================ */
+
 export const listarFuncionarios = async (req: Request, res: Response) => {
   try {
     const funcionarios = await Funcionario.find();
@@ -59,9 +55,7 @@ export const listarFuncionarios = async (req: Request, res: Response) => {
   }
 };
 
-/* ============================
-   BUSCAR POR ID
-============================ */
+
 export const buscarFuncionarioPorId = async (req: Request, res: Response) => {
   try {
     const funcionario = await Funcionario.findById(req.params.id);
@@ -76,9 +70,7 @@ export const buscarFuncionarioPorId = async (req: Request, res: Response) => {
   }
 };
 
-/* ============================
-   ATUALIZAR
-============================ */
+
 export const atualizarFuncionario = async (req: Request, res: Response) => {
   try {
     const funcionarioAtualizado = await Funcionario.findByIdAndUpdate(
@@ -100,9 +92,7 @@ export const atualizarFuncionario = async (req: Request, res: Response) => {
   }
 };
 
-/* ============================
-   DELETAR
-============================ */
+
 export const deletarFuncionario = async (req: Request, res: Response) => {
   try {
     const deletado = await Funcionario.findByIdAndDelete(req.params.id);

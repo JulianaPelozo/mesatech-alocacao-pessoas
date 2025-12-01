@@ -13,7 +13,7 @@ export const getFilteredTasks = async (req: Request, res: Response) => {
       filter.employee = { $in: funcionarios };
     }
 
-   
+
     if (funcionarioId) {
       filter.employee = funcionarioId;
     }
