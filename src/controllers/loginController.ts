@@ -3,7 +3,6 @@ import Login, {Role} from "../models/loginModel";
 import bcrypt from "bcrypt";
 
 import jwt from "jsonwebtoken";
-import dotenv from "dotenv";
 
 export const registerLogin = async (req: Request, res: Response) => {
     const {firstName, lastName, email, password, phone, CPF, role} = req.body;
@@ -43,7 +42,7 @@ export const login = async (req: Request, res: Response) => {
     }
 
     try {
-        const user = await Login.findOne({$or: [{email: identifier}, {CPF: identifier}]});
+        const user = await Login.findOne({$or: [{email: identifier}]});
         if (!user) {
             return res.status(404).json({message: "Usuário não encontrado."});
         }

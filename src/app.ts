@@ -22,7 +22,7 @@ if (!MONGODB_URI) {
 
 mongoose
   .connect(MONGODB_URI)
-  .then(() => console.log('✅ Conectado ao MongoDB'))
+  .then(() => console.log('Conectado ao MongoDB'))
   .catch((error) =>
     console.error('Erro ao conectar com MongoDB:', error)
   );

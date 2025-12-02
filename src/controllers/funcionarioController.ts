@@ -1,35 +1,20 @@
 import { Request, Response } from "express";
 import Funcionario from "../models/funcionarioModel";
 
-
 export const cadastrarFuncionario = async (req: Request, res: Response) => {
   try {
-    const {
-      name,
-      departamento,
-      funcao,
-      telefone,
-      email,
-      disponivel,
-      empresa,
-      tags,
-      gerente
-    } = req.body;
+    const { nome, cargo, telefone, empresa } = req.body;
 
-    if (!name) {
-      return res.status(400).json({ message: "O campo 'name' é obrigatório." });
+    // Verifica campos obrigatórios
+    if (!nome || !cargo || !empresa) {
+      return res.status(400).json({ message: "Os campos 'nome', 'cargo' e 'empresa' são obrigatórios." });
     }
 
     const funcionario = new Funcionario({
-      name,
-      departamento,
-      funcao,
+      nome,
+      cargo,
       telefone,
-      email,
-      disponivel,
-      empresa,
-      tags,
-      gerente
+      empresa
     });
 
     const salvo = await funcionario.save();
@@ -45,20 +30,18 @@ export const cadastrarFuncionario = async (req: Request, res: Response) => {
   }
 };
 
-
 export const listarFuncionarios = async (req: Request, res: Response) => {
   try {
-    const funcionarios = await Funcionario.find();
+    const funcionarios = await Funcionario.find().populate("empresa");
     res.json(funcionarios);
   } catch (error) {
     res.status(500).json({ message: "Erro ao listar funcionários." });
   }
 };
 
-
 export const buscarFuncionarioPorId = async (req: Request, res: Response) => {
   try {
-    const funcionario = await Funcionario.findById(req.params.id);
+    const funcionario = await Funcionario.findById(req.params.id).populate("empresa");
 
     if (!funcionario) {
       return res.status(404).json({ message: "Funcionário não encontrado." });
@@ -69,7 +52,6 @@ export const buscarFuncionarioPorId = async (req: Request, res: Response) => {
     res.status(500).json({ message: "Erro ao buscar funcionário." });
   }
 };
-
 
 export const atualizarFuncionario = async (req: Request, res: Response) => {
   try {
@@ -91,7 +73,6 @@ export const atualizarFuncionario = async (req: Request, res: Response) => {
     res.status(500).json({ message: "Erro ao atualizar funcionário." });
   }
 };
-
 
 export const deletarFuncionario = async (req: Request, res: Response) => {
   try {
