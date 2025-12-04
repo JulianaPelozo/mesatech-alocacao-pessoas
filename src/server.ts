@@ -28,18 +28,18 @@ app.use('/api/employees', employeeRoutes);
 app.use('/api/allocations', allocationRoutes);
 
 // Health check
-app.get('/api/health', (req, res) => {
+app.get('/api/health', (_req, res) => {
   res.json({ status: 'OK', message: 'ANU Backend is running' });
 });
 
 // 404 handler
-app.use((req, res) => {
+app.use((_req, res) => {
   res.status(404).json({ error: 'Route not found' });
 });
 
 // Error handler
-app.use((err: any, req: express.Request, res: express.Response, next: express.NextFunction) => {
-  console.error(err.stack);
+app.use((_err: any, _req: express.Request, res: express.Response, _next: express.NextFunction) => {
+  console.error(_err.stack);
   res.status(500).json({ error: 'Internal server error' });
 });
 

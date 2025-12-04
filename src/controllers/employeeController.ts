@@ -5,7 +5,7 @@ import { AuthRequest } from '../middleware/auth';
 // @desc    Get all employees
 // @route   GET /api/employees
 // @access  Private
-export const getEmployees = async (req: AuthRequest, res: Response) => {
+export const getEmployees = async (_req: AuthRequest, res: Response) => {
   try {
     const employees = await Employee.find().sort({ createdAt: -1 });
     
@@ -22,12 +22,13 @@ export const getEmployees = async (req: AuthRequest, res: Response) => {
 // @desc    Get single employee
 // @route   GET /api/employees/:id
 // @access  Private
-export const getEmployee = async (req: AuthRequest, res: Response) => {
+export const getEmployee = async (req: AuthRequest, res: Response): Promise<void> => {
   try {
     const employee = await Employee.findById(req.params.id);
 
     if (!employee) {
-      return res.status(404).json({ error: 'Funcionário não encontrado' });
+      res.status(404).json({ error: 'Funcionário não encontrado' });
+      return;
     }
 
     res.json({
@@ -42,13 +43,14 @@ export const getEmployee = async (req: AuthRequest, res: Response) => {
 // @desc    Create employee
 // @route   POST /api/employees
 // @access  Private
-export const createEmployee = async (req: AuthRequest, res: Response) => {
+export const createEmployee = async (req: AuthRequest, res: Response): Promise<void> => {
   try {
     const { name, role, company, companyColor, departamento, projeto, disponibilidade, funcao, telefone, gerente, tags } = req.body;
 
     // Validate required fields
     if (!name || !role || !company) {
-      return res.status(400).json({ error: 'Nome, cargo e empresa são obrigatórios' });
+      res.status(400).json({ error: 'Nome, cargo e empresa são obrigatórios' });
+      return;
     }
 
     const employee = await Employee.create({
@@ -77,7 +79,7 @@ export const createEmployee = async (req: AuthRequest, res: Response) => {
 // @desc    Update employee
 // @route   PUT /api/employees/:id
 // @access  Private
-export const updateEmployee = async (req: AuthRequest, res: Response) => {
+export const updateEmployee = async (req: AuthRequest, res: Response): Promise<void> => {
   try {
     const employee = await Employee.findByIdAndUpdate(
       req.params.id,
@@ -86,7 +88,8 @@ export const updateEmployee = async (req: AuthRequest, res: Response) => {
     );
 
     if (!employee) {
-      return res.status(404).json({ error: 'Funcionário não encontrado' });
+      res.status(404).json({ error: 'Funcionário não encontrado' });
+      return;
     }
 
     res.json({
@@ -101,12 +104,13 @@ export const updateEmployee = async (req: AuthRequest, res: Response) => {
 // @desc    Delete employee
 // @route   DELETE /api/employees/:id
 // @access  Private
-export const deleteEmployee = async (req: AuthRequest, res: Response) => {
+export const deleteEmployee = async (req: AuthRequest, res: Response): Promise<void> => {
   try {
     const employee = await Employee.findByIdAndDelete(req.params.id);
 
     if (!employee) {
-      return res.status(404).json({ error: 'Funcionário não encontrado' });
+      res.status(404).json({ error: 'Funcionário não encontrado' });
+      return;
     }
 
     res.json({

@@ -5,7 +5,7 @@ import { AuthRequest } from '../middleware/auth';
 // @desc    Get all allocations
 // @route   GET /api/allocations
 // @access  Private
-export const getAllocations = async (req: AuthRequest, res: Response) => {
+export const getAllocations = async (_req: AuthRequest, res: Response) => {
   try {
     const allocations = await Allocation.find().sort({ startDate: -1 });
     
@@ -41,23 +41,25 @@ export const getAllocationsByEmployee = async (req: AuthRequest, res: Response) 
 // @desc    Create allocation
 // @route   POST /api/allocations
 // @access  Private
-export const createAllocation = async (req: AuthRequest, res: Response) => {
+export const createAllocation = async (req: AuthRequest, res: Response): Promise<void> => {
   try {
     const { employeeName, company, title, startDate, endDate, color, cargaHorariaSemanal } = req.body;
 
     // Validate required fields
     if (!employeeName || !company || !startDate || !endDate) {
-      return res.status(400).json({ 
+      res.status(400).json({ 
         error: 'Nome do funcionário, empresa, data de início e data de término são obrigatórios' 
       });
+      return;
     }
 
     // Validate date format (YYYY-MM-DD)
     const dateRegex = /^\d{4}-\d{2}-\d{2}$/;
     if (!dateRegex.test(startDate) || !dateRegex.test(endDate)) {
-      return res.status(400).json({ 
+      res.status(400).json({ 
         error: 'Datas devem estar no formato YYYY-MM-DD' 
       });
+      return;
     }
 
     const allocation = await Allocation.create({
@@ -82,7 +84,7 @@ export const createAllocation = async (req: AuthRequest, res: Response) => {
 // @desc    Update allocation
 // @route   PUT /api/allocations/:id
 // @access  Private
-export const updateAllocation = async (req: AuthRequest, res: Response) => {
+export const updateAllocation = async (req: AuthRequest, res: Response): Promise<void> => {
   try {
     const allocation = await Allocation.findByIdAndUpdate(
       req.params.id,
@@ -91,7 +93,8 @@ export const updateAllocation = async (req: AuthRequest, res: Response) => {
     );
 
     if (!allocation) {
-      return res.status(404).json({ error: 'Alocação não encontrada' });
+      res.status(404).json({ error: 'Alocação não encontrada' });
+      return;
     }
 
     res.json({
@@ -106,12 +109,13 @@ export const updateAllocation = async (req: AuthRequest, res: Response) => {
 // @desc    Delete allocation
 // @route   DELETE /api/allocations/:id
 // @access  Private
-export const deleteAllocation = async (req: AuthRequest, res: Response) => {
+export const deleteAllocation = async (req: AuthRequest, res: Response): Promise<void> => {
   try {
     const allocation = await Allocation.findByIdAndDelete(req.params.id);
 
     if (!allocation) {
-      return res.status(404).json({ error: 'Alocação não encontrada' });
+      res.status(404).json({ error: 'Alocação não encontrada' });
+      return;
     }
 
     res.json({

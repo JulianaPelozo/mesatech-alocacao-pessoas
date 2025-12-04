@@ -8,7 +8,7 @@ export interface AuthRequest extends Request {
   };
 }
 
-export const protect = async (req: AuthRequest, res: Response, next: NextFunction) => {
+export const protect = async (req: AuthRequest, res: Response, next: NextFunction): Promise<void> => {
   try {
     let token: string | undefined;
 
@@ -18,7 +18,8 @@ export const protect = async (req: AuthRequest, res: Response, next: NextFunctio
     }
 
     if (!token) {
-      return res.status(401).json({ error: 'Não autorizado - Token não fornecido' });
+      res.status(401).json({ error: 'Não autorizado - Token não fornecido' });
+      return;
     }
 
     try {
@@ -30,9 +31,9 @@ export const protect = async (req: AuthRequest, res: Response, next: NextFunctio
       req.user = decoded;
       next();
     } catch (error) {
-      return res.status(401).json({ error: 'Não autorizado - Token inválido' });
+      res.status(401).json({ error: 'Não autorizado - Token inválido' });
     }
   } catch (error) {
-    return res.status(500).json({ error: 'Erro no servidor' });
+    res.status(500).json({ error: 'Erro no servidor' });
   }
 };
