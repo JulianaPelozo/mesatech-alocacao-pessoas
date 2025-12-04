@@ -2,34 +2,37 @@ import { Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
 
 export interface AuthRequest extends Request {
-  user?: any;
+  user?: {
+    id: string;
+    email: string;
+  };
 }
 
-export const authenticateToken = (req: AuthRequest, res: Response, next: NextFunction) => {
-  const authHeader = req.headers['authorization'];
-  const token = authHeader && authHeader.split(' ')[1];
+export const protect = async (req: AuthRequest, res: Response, next: NextFunction) => {
+  try {
+    let token: string | undefined;
 
-  if (!token) {
-    return res.status(401).json({ message: 'Token de acesso requerido' });
+    // Check for token in Authorization header
+    if (req.headers.authorization && req.headers.authorization.startsWith('Bearer')) {
+      token = req.headers.authorization.split(' ')[1];
+    }
+
+    if (!token) {
+      return res.status(401).json({ error: 'Não autorizado - Token não fornecido' });
+    }
+
+    try {
+      const decoded = jwt.verify(token, process.env.JWT_SECRET || 'secret') as {
+        id: string;
+        email: string;
+      };
+
+      req.user = decoded;
+      next();
+    } catch (error) {
+      return res.status(401).json({ error: 'Não autorizado - Token inválido' });
+    }
+  } catch (error) {
+    return res.status(500).json({ error: 'Erro no servidor' });
   }
-
-  jwt.verify(token, process.env.JWT_SECRET!, (err, user) => {
-    if (err) {
-      return res.status(403).json({ message: 'Token inválido ou expirado' });
-    }
-    req.user = user;
-    next();
-  });
-};
-
-
-export const requireRole = (roles: string[]) => {
-  return (req: AuthRequest, res: Response, next: NextFunction) => {
-    if (!req.user || !roles.includes(req.user.role)) {
-      return res.status(403).json({ 
-        message: 'Acesso negado. Permissões insuficientes.' 
-      });
-    }
-    next();
-  };
 };

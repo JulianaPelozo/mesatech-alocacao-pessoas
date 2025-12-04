@@ -1,58 +1,25 @@
-# =========================
-# Node.js
-# =========================
+# Dependencies
 node_modules/
-node_modules
+
+# Environment variables
+.env
+
+# Build output
+dist/
+
+# Logs
+*.log
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
-pnpm-debug.log*
-package-lock.json
-yarn.lock
 
-# =========================
-# TypeScript
-# =========================
-dist/
-build/
-*.tsbuildinfo
-
-# =========================
-# Logs e cache
-# =========================
-logs/
-*.log
-*.log.*
-pids/
-*.pid
-*.seed
-*.pid.lock
-
-# =========================
-# Ambiente e configurações locais
-# =========================
-.env
-.env.local
-.env.development.local
-.env.test.local
-.env.production.local
-
-# =========================
-# Sistema operacional
-# =========================
+# OS
 .DS_Store
 Thumbs.db
-desktop.ini
 
-# =========================
-# IDE / Editor
-# =========================
+# IDE
 .vscode/
 .idea/
 *.swp
-
-# =========================
-# Testes
-# =========================
-coverage/
-jest-coverage/
+*.swo
+*.swn
