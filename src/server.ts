@@ -15,14 +15,16 @@ const PORT = process.env.PORT || 5000;
 connectDB();
 
 // Middleware
+const allowedOrigins = [
+  'http://localhost:5173',
+  'http://localhost:5174',
+  'https://anu-frontend.vercel.app',
+  'https://heartfelt-jalebi-dd2b02.netlify.app',
+  process.env.FRONTEND_URL
+].filter((origin): origin is string => Boolean(origin));
+
 app.use(cors({
-  origin: [
-    'http://localhost:5173',
-    'http://localhost:5174',
-    'https://anu-frontend.vercel.app',
-    'https://heartfelt-jalebi-dd2b02.netlify.app/',
-    process.env.FRONTEND_URL
-  ].filter(Boolean),
+  origin: allowedOrigins,
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization']
