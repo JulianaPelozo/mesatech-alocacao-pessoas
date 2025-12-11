@@ -19,7 +19,7 @@ const allowedOrigins = [
   'http://localhost:5173',
   'http://localhost:5174',
   'https://anu-frontend.vercel.app',
-  'https://heartfelt-jalebi-dd2b02.netlify.app',
+  'https://anufront.netlify.app/',
   process.env.FRONTEND_URL
 ].filter((origin): origin is string => Boolean(origin));
 
